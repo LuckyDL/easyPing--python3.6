@@ -2,11 +2,10 @@
 import sys
 import re
 import threading
-import subprocess
-import shlex
+from ping import quiet_ping, PingError
 from PyQt5 import QtCore, QtWidgets
-
 from MyPing import Ui_MyPing
+
 
 class easyPing(QtWidgets.QWidget):
     '''
@@ -62,11 +61,10 @@ class easyPing(QtWidgets.QWidget):
         '''
         检查对应的IP是否被占用
         '''
-        cmd = "ping -n 1 -w 1000 %s" % ip
         try:
-            subprocess.check_call(args=shlex.split(cmd))
+            quiet_ping(ip, timeout=1.2, count=1, path_finder=True)
             self._ping_signal.emit(True, ip)
-        except subprocess.CalledProcessError:
+        except PingError:
             self._ping_signal.emit(False, ip)
 
     def reset_ui(self):
