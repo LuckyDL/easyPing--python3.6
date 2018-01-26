@@ -66,7 +66,7 @@ class EasyPing(QtWidgets.QWidget):
         cmd_str = "ping {0} -n 1 -w 600".format(ip)
         DETACHED_PROCESS = 0x00000008   # 不创建cmd窗口
         try:
-            subprocess.check_call(cmd_str, creationflags=DETACHED_PROCESS)  # 仅用于windows系统
+            subprocess.run(cmd_str, creationflags=DETACHED_PROCESS, check=True)  # 仅用于windows系统
         except subprocess.CalledProcessError as err:
             self._ping_signal.emit(False, ip)
         else:
