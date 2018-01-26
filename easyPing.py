@@ -16,7 +16,7 @@ class EasyPing(QtWidgets.QWidget):
     _ping_signal = QtCore.pyqtSignal(bool, str)
 
     def __init__(self, parent=None):
-        super(easyPing, self).__init__()
+        super(EasyPing, self).__init__()
 
         self.ui = Ui_MyPing()
         self.ui.setupUi(self)
