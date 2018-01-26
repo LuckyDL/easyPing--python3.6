@@ -27,7 +27,7 @@ class Ui_MyPing(object):
         self.horizontalLayout.setSpacing(30)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.startIP = QtWidgets.QLineEdit(self.widget)
-        self.startIP.setText("192.168.0.1")
+        self.startIP.setText("192.168.0.0")
         self.startIP.selectAll()
         self.startIP.setObjectName("startIP")
         self.horizontalLayout.addWidget(self.startIP)

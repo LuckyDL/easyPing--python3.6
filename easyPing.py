@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+# easyPing is a widget to check which IP is in use in your LAN
+
 import sys
 import re
 import threading
-from ping import quiet_ping, PingError
+import subprocess
 from PyQt5 import QtCore, QtWidgets
 from MyPing import Ui_MyPing
 
 
-class easyPing(QtWidgets.QWidget):
+class EasyPing(QtWidgets.QWidget):
     '''
     检测某网段的IP使用情况
     '''
@@ -41,7 +43,7 @@ class easyPing(QtWidgets.QWidget):
 
     def start_ping(self):
         '''
-        启动多线程入口
+        启动多线程
         '''
         self.reset_ui()
         startip = self.ui.startIP.text().split('.')
@@ -61,13 +63,17 @@ class easyPing(QtWidgets.QWidget):
         '''
         检查对应的IP是否被占用
         '''
+        cmd_str = "ping {0} -n 1 -w 600".format(ip)
+        DETACHED_PROCESS = 0x00000008   # 不创建cmd窗口
         try:
-            quiet_ping(ip, timeout=1.2, count=1, path_finder=True)
-            self._ping_signal.emit(True, ip)
-        except PingError:
+            subprocess.check_call(cmd_str, creationflags=DETACHED_PROCESS)  # 仅用于windows系统
+        except subprocess.CalledProcessError as err:
             self._ping_signal.emit(False, ip)
+        else:
+            self._ping_signal.emit(True, ip)
 
     def reset_ui(self):
+        ''' 初始化窗口IP窗格为灰色背景 '''
         for item in self.ui.label_list:
             item.setStyleSheet("background-color: rgb(203, 203, 203);")
 
@@ -79,13 +85,13 @@ class easyPing(QtWidgets.QWidget):
         '''
         index = int(ip.split('.')[3])
         if result:
-            self.ui.label_list[index].setStyleSheet("background-color: rgb(85, 170, 127);")
+            self.ui.label_list[index].setStyleSheet("background-color: rgb(85, 170, 127);") # 设置背景为绿色
         else:
-            self.ui.label_list[index].setStyleSheet("background-color: rgb(255, 142, 119);")
+            self.ui.label_list[index].setStyleSheet("background-color: rgb(255, 142, 119);")    # 设置背景为红色
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    easy = easyPing()
+    easy = EasyPing()
     easy.show()
     sys.exit(app.exec_())
