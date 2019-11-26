@@ -1,6 +1,8 @@
 # easyPing--python3.6
 easyPing is a widget to check which IP is in use in your LAN
 
+因国内网速问题：可访问[码云](https://gitee.com/luckyDL/easyPing--python3.6)代码仓库
+
 ## development environment：
    python3.6 + PyQt5
 
